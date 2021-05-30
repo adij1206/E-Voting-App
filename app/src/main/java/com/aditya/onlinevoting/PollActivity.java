@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -76,6 +77,31 @@ public class PollActivity extends AppCompatActivity {
                             public void onClick(View view) {
                                 String k = getRef(position).getKey();
                                 sendToAddCandidate(k);
+                            }
+                        });
+
+                        holder.pollCloseBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if(model.getClose().equals("open")){
+                                    DatabaseReference reference = getRef(position);
+                                    String i = reference.getKey();
+                                    Log.d("Adi", "onClick: "+i);
+                                    HashMap<String, Object> messageInfoMap = new HashMap<>();
+                                    messageInfoMap.put("name",model.getName());
+                                    messageInfoMap.put("detail",model.getDetail());
+                                    messageInfoMap.put("close","close");
+                                    messageInfoMap.put("userid",i);
+
+                                    userRef.child(i).updateChildren(messageInfoMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful()){
+                                                Toast.makeText(PollActivity.this, "Poll SuccessFully Closed...", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
                             }
                         });
                     }
@@ -191,12 +217,12 @@ public class PollActivity extends AppCompatActivity {
 
     public class ListViewHolder extends RecyclerView.ViewHolder {
         TextView pollName,pollDetail;
-        Button closeBtn;
+        Button pollCloseBtn;
         public ListViewHolder(@NonNull View itemView) {
             super(itemView);
             pollName = itemView.findViewById(R.id.pollName);
             pollDetail = itemView.findViewById(R.id.pollDetail);
-            closeBtn = itemView.findViewById(R.id.closeBtn);
+            pollCloseBtn = itemView.findViewById(R.id.pollCloseBtn);
 
         }
     }

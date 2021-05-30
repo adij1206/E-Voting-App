@@ -37,6 +37,7 @@ public class UserPollActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_poll);
 
+
         mAuth = FirebaseAuth.getInstance();
         mRef = FirebaseDatabase.getInstance().getReference().child("Poll");
 
@@ -54,6 +55,7 @@ public class UserPollActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        pollList.clear();
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

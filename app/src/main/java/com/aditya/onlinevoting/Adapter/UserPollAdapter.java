@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aditya.onlinevoting.R;
 import com.aditya.onlinevoting.User.UserVotingActivity;
 import com.aditya.onlinevoting.model.Poll;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -20,6 +28,9 @@ public class UserPollAdapter extends RecyclerView.Adapter<UserPollAdapter.UserVi
 
     private List<Poll> pollList;
     private Context context;
+
+    private DatabaseReference mRef;
+    private FirebaseAuth mAuth;
 
     public UserPollAdapter(List<Poll> pollList,Context context){
         this.pollList = pollList;
@@ -31,6 +42,10 @@ public class UserPollAdapter extends RecyclerView.Adapter<UserPollAdapter.UserVi
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.user_poll_list_layout,parent,false);
+
+        mAuth = FirebaseAuth.getInstance();
+        mRef = FirebaseDatabase.getInstance().getReference().child("Vote");
+
         return new UserViewHolder(view);
     }
 
@@ -41,13 +56,31 @@ public class UserPollAdapter extends RecyclerView.Adapter<UserPollAdapter.UserVi
         holder.userPollDetail.setText(poll.getDetail());
 
         String id = poll.getUserid();
+        String userId = mAuth.getCurrentUser().getUid();
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, UserVotingActivity.class);
-                intent.putExtra("id",id);
-                context.startActivity(intent);
+                Query query = mRef.child(id).orderByKey().equalTo(userId);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            Toast.makeText(context, "You Already Had Voted in a Poll...", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Intent intent = new Intent(context, UserVotingActivity.class);
+                            intent.putExtra("id",id);
+                            context.startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
             }
         });
     }

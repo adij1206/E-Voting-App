@@ -20,17 +20,17 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/pollName"
+                android:id="@+id/userCandidateName"
                 android:textColor="@color/contentTextColor"
-                android:text="Poll Name"
+                android:text="Candidate Name"
                 android:textStyle="bold"
                 android:textSize="24sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
-                android:id="@+id/pollDetail"
-                android:text="Details"
-                android:layout_below="@id/pollName"
+                android:id="@+id/userCandidateDetail"
+                android:text="Candidate Details"
+                android:layout_below="@id/userCandidateName"
                 android:paddingTop="5dp"
                 android:textSize="18sp"
                 android:layout_width="wrap_content"
@@ -39,15 +39,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_alignBottom="@id/pollDetail"
+                android:layout_alignBottom="@id/userCandidateDetail"
                 android:orientation="horizontal"
                 android:layout_marginTop="15dp">
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/pollCloseBtn"
+                    android:id="@+id/voteBtn"
+                    android:backgroundTint="@color/secondary"
                     android:textSize="15sp"
-                    android:text="Close" />
+                    android:text="Vote" />
             </TableRow>
 
         </RelativeLayout>

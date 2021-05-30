@@ -24,8 +24,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -95,27 +99,44 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if(c==0){
-            loadingBar.setTitle("Creating New Account");
-            loadingBar.setMessage("Please wait while we are creating your account...");
-            loadingBar.setCanceledOnTouchOutside(true);
-            loadingBar.show();
-
-            mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            Query query = mRef.child("Uid").orderByKey().equalTo(uid);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(task.isSuccessful()){
-                        mRef.child("Uid").child(uid).setValue("");
-                        loadingBar.dismiss();
-                        sendToUserPoll();
-                        Toast.makeText(RegisterActivity.this, "Account Created Successfully", Toast.LENGTH_SHORT).show();
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(snapshot.exists()){
+                        Toast.makeText(RegisterActivity.this, "Aadhar Card is Already Register...", Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        String error = task.getException().toString();
-                        Toast.makeText(RegisterActivity.this, "Error :"+error, Toast.LENGTH_SHORT).show();
-                        loadingBar.dismiss();
+                        loadingBar.setTitle("Creating New Account");
+                        loadingBar.setMessage("Please wait while we are creating your account...");
+                        loadingBar.setCanceledOnTouchOutside(true);
+                        loadingBar.show();
+
+                        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                    mRef.child("Uid").child(uid).setValue("");
+                                    loadingBar.dismiss();
+                                    sendToUserPoll();
+                                    Toast.makeText(RegisterActivity.this, "Account Created Successfully", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    String error = task.getException().toString();
+                                    Toast.makeText(RegisterActivity.this, "Error :"+error, Toast.LENGTH_SHORT).show();
+                                    loadingBar.dismiss();
+                                }
+                            }
+                        });
                     }
                 }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
             });
+
         }
     }
 

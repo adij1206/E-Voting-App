@@ -46,7 +46,7 @@ public class AddCandidateActivity extends AppCompatActivity {
 
     private String pollName;
 
-    private List<Candidate> candidateList,candidates;
+    private List<Candidate> candidateList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +139,8 @@ public class AddCandidateActivity extends AppCompatActivity {
         HashMap<String, Object> messageInfoMap = new HashMap<>();
         messageInfoMap.put("name",n);
         messageInfoMap.put("detail",i);
+        messageInfoMap.put("userid",id);
+        messageInfoMap.put("parent",pollName);
         Log.d("Adi", "saveToDb: "+"Ok");
         childUser.child(id).updateChildren(messageInfoMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
