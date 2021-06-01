@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.aditya.onlinevoting.Adapter.UserPollAdapter;
 import com.aditya.onlinevoting.R;
@@ -49,7 +51,24 @@ public class UserPollActivity extends AppCompatActivity {
         recyclerView.setAdapter(userPollAdapter);
 
     }
-    
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if(id==R.id.signout){
+            mAuth.signOut();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onStart() {

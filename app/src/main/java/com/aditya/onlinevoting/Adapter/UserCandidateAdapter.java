@@ -8,12 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.contentcapture.DataRemovalRequest;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aditya.onlinevoting.R;
+import com.aditya.onlinevoting.User.UserPollActivity;
 import com.aditya.onlinevoting.User.UserVotingActivity;
 import com.aditya.onlinevoting.model.Candidate;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -68,11 +71,39 @@ public class UserCandidateAdapter extends RecyclerView.Adapter<UserCandidateAdap
                             if(task.isSuccessful()){
                                 Log.d("Adi", "onComplete: "+"Vote Casted");
                                 voteRef.child(parent).child(userId).setValue("");
+
+                                showDetails(view,candidate.getName());
                             }
                         }
                     });
                 }
             });
+    }
+
+    private void showDetails(View view,String name) {
+        ViewGroup viewGroup = view.findViewById(android.R.id.content);
+
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.success_vote, viewGroup, false);
+
+        ImageView closeBtn = dialogView.findViewById(R.id.close_vote);
+        TextView sub_title = dialogView.findViewById(R.id.sub_title_view_success);
+        sub_title.setText("You Have Successfully Voted To "+name);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.show();
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                Intent intent = new Intent(context, UserPollActivity.class);
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @Override

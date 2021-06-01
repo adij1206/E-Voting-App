@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OnlineVoting">
-        <activity android:name=".User.UserVotingActivity"></activity>
+        <activity android:name=".Admin.ResultActivity"></activity>
+        <activity android:name=".User.UserVotingActivity" />
         <activity android:name=".User.UserPollActivity" />
         <activity android:name=".AddCandidateActivity" />
         <activity android:name=".AdminRegisterActivity" />

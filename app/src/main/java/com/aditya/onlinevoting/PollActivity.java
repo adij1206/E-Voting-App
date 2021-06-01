@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aditya.onlinevoting.Admin.AdminLoginActivity;
+import com.aditya.onlinevoting.Admin.ResultActivity;
 import com.aditya.onlinevoting.model.Poll;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -53,6 +54,8 @@ public class PollActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_poll);
 
+        getSupportActionBar().setTitle("Create Poll");
+
         pollList = new ArrayList<>();
 
         mAuth = FirebaseAuth.getInstance();
@@ -80,10 +83,10 @@ public class PollActivity extends AppCompatActivity {
                             }
                         });
 
-                        holder.pollCloseBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if(model.getClose().equals("open")){
+                        if(model.getClose().equals("open")){
+                            holder.pollCloseBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
                                     DatabaseReference reference = getRef(position);
                                     String i = reference.getKey();
                                     Log.d("Adi", "onClick: "+i);
@@ -92,6 +95,7 @@ public class PollActivity extends AppCompatActivity {
                                     messageInfoMap.put("detail",model.getDetail());
                                     messageInfoMap.put("close","close");
                                     messageInfoMap.put("userid",i);
+                                    messageInfoMap.put("result","not_declare");
 
                                     userRef.child(i).updateChildren(messageInfoMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -102,8 +106,24 @@ public class PollActivity extends AppCompatActivity {
                                         }
                                     });
                                 }
-                            }
-                        });
+                            });
+                        }
+                        else {
+                            holder.pollCloseBtn.setText("View Result");
+                            holder.pollCloseBtn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    DatabaseReference databaseReference = getRef(position);
+                                    String p = databaseReference.getKey();
+
+                                    Intent intent = new Intent(PollActivity.this, ResultActivity.class);
+                                    intent.putExtra("pollname",model.getName());
+                                    intent.putExtra("pollid",p);
+                                    startActivity(intent);
+
+                                }
+                            });
+                        }
                     }
 
                     @NonNull
@@ -148,7 +168,7 @@ public class PollActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id==R.id.signout){
-
+            mAuth.signOut();
         }
 
         return super.onOptionsItemSelected(item);
@@ -203,6 +223,7 @@ public class PollActivity extends AppCompatActivity {
         messageInfoMap.put("detail",i);
         messageInfoMap.put("close","open");
         messageInfoMap.put("userid",a);
+        messageInfoMap.put("result","not_declare");
 
         childUser.updateChildren(messageInfoMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

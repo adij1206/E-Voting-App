@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:backgroundTint="@color/background"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="35dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/close_vote"
+        android:layout_margin="5dp"
+        android:layout_height="35dp"
+        android:background="@drawable/ic_baseline_cancel_24" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/title_vote"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Success "
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:id="@+id/title_vote_success" />
+
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_width="140dp"
+            android:layout_gravity="center"
+            android:background="@color/secondary"
+            android:layout_height="2dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:text="You Have Successfully Voted..."
+            android:textColor="@color/black"
+            android:layout_marginTop="25dp"
+            android:id="@+id/sub_title_view_success"
+            android:textAlignment="center" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

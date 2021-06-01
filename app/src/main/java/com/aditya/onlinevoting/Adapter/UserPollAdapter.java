@@ -55,32 +55,42 @@ public class UserPollAdapter extends RecyclerView.Adapter<UserPollAdapter.UserVi
         holder.userPollName.setText(poll.getName());
         holder.userPollDetail.setText(poll.getDetail());
 
+        if(poll.getClose().equals("close") && poll.getResult().equals("not_declare")){
+            holder.userPollAction.setText("Poll Has Been Closed,Result Will be announced Soon");
+        }
+        else if(!poll.getResult().equals("not_declare")){
+            holder.userPollAction.setText(poll.getResult());
+        }
+
         String id = poll.getUserid();
         String userId = mAuth.getCurrentUser().getUid();
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Query query = mRef.child(id).orderByKey().equalTo(userId);
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.exists()){
-                            Toast.makeText(context, "You Already Had Voted in a Poll...", Toast.LENGTH_SHORT).show();
+                if(poll.getClose().equals("close")){
+                    Toast.makeText(context, "Sorry! You Can't Vote Now....", Toast.LENGTH_SHORT).show();
+                }else{
+                    Query query = mRef.child(id).orderByKey().equalTo(userId);
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                Toast.makeText(context, "You Already Had Voted in a Poll...", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Intent intent = new Intent(context, UserVotingActivity.class);
+                                intent.putExtra("id",id);
+                                context.startActivity(intent);
+                            }
                         }
-                        else{
-                            Intent intent = new Intent(context, UserVotingActivity.class);
-                            intent.putExtra("id",id);
-                            context.startActivity(intent);
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
                         }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
+                    });
+                }
             }
         });
     }

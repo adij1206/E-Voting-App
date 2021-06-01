@@ -46,12 +46,14 @@ public class AddCandidateActivity extends AppCompatActivity {
 
     private String pollName;
 
-    private List<Candidate> candidateList;
+    private List<Candidate> candidateList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_candidate);
+
+        getSupportActionBar().setTitle("Add Candidate");
 
         mAuth = FirebaseAuth.getInstance();
         mRef = FirebaseDatabase.getInstance().getReference();
@@ -65,11 +67,8 @@ public class AddCandidateActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        candidateList = getAllCandidate();
-
         candidateAdapter = new CandidateAdapter(candidateList,AddCandidateActivity.this);
         recyclerView.setAdapter(candidateAdapter);
-        candidateAdapter.notifyDataSetChanged();
 
         fab = (FloatingActionButton) findViewById(R.id.candidateFab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +79,31 @@ public class AddCandidateActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mRef.child("Candidate").child(pollName).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.hasChildren()){
+                    for(DataSnapshot dataSnapshot: snapshot.getChildren()){
+                        String id = dataSnapshot.getKey();
+                        Candidate c = dataSnapshot.child(id).getValue(Candidate.class);
+                        Log.d("Adi", "onDataChange: "+c.getName());
+                        candidateList.add(c);
+                        candidateAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        }
 
     private List<Candidate> getAllCandidate(){
        List<Candidate> list = new ArrayList<>();

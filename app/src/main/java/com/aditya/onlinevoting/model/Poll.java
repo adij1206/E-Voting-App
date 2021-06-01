@@ -5,16 +5,26 @@ public class Poll {
     String detail;
     String close;
     String userid;
+    String result;
 
     public Poll(){
 
     }
 
-    public Poll(String name, String detail, String close, String userid) {
+    public Poll(String name, String detail, String close, String userid,String result) {
         this.name = name;
         this.detail = detail;
         this.close = close;
         this.userid = userid;
+        this.result = result;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 
     public String getUserid() {
