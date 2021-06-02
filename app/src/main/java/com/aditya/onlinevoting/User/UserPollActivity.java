@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -65,9 +66,16 @@ public class UserPollActivity extends AppCompatActivity {
 
         if(id==R.id.signout){
             mAuth.signOut();
+            sendToLogin();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sendToLogin() {
+        Intent loginIntent = new Intent(UserPollActivity.this,LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
     }
 
     @Override

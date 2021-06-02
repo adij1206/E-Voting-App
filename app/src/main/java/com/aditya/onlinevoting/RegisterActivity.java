@@ -51,7 +51,7 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 public class RegisterActivity extends AppCompatActivity {
 
     private static final int MY_CAMERA_REQUEST_CODE = 100;
-    private String uid,name,dob;
+    private String uid="",name,dob;
 
     private CircularProgressButton circRegisterBtn;
     private EditText emailTxt,passwordTxt;
@@ -217,7 +217,7 @@ public class RegisterActivity extends AppCompatActivity {
                 int eventType = parser.getEventType();
                 while (eventType != XmlPullParser.END_DOCUMENT) {
                     if(eventType == XmlPullParser.START_DOCUMENT) {
-                        Log.d("Rajdeol","Start document");
+                        Log.d("Adi","Start document");
                     } else if(eventType == XmlPullParser.START_TAG && q.equals(parser.getName())) {
                         // extract data from tag
                         //uid

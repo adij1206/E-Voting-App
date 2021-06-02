@@ -31,12 +31,12 @@
                     android:textColor="@color/whiteTextColor"
                     android:text="Here’s\nyour first\nstep with \nus! "/>
 
-<!--                <ImageView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:src="@drawable/ic_login_hero"-->
-<!--                    android:layout_alignParentTop="true"-->
-<!--                    android:layout_alignParentRight="true"/>-->
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_login_hero"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"/>
             </RelativeLayout>
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                         <EditText
                             android:id="@+id/editTextPassword"
                             style="@style/modifiedEditText"
-                            android:hint="Enter PAssword"
+                            android:hint="Enter Password"
                             android:maxLines="1"
                             android:inputType="textPassword"/>
                     </com.google.android.material.textfield.TextInputLayout>
