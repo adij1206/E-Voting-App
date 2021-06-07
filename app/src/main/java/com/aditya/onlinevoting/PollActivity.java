@@ -55,12 +55,13 @@ public class PollActivity extends AppCompatActivity {
         setContentView(R.layout.activity_poll);
 
         getSupportActionBar().setTitle("Create Poll");
-
+        fab = (FloatingActionButton) findViewById(R.id.adminFab);
         pollList = new ArrayList<>();
 
         mAuth = FirebaseAuth.getInstance();
         mRef = FirebaseDatabase.getInstance().getReference();
         String userId = mAuth.getCurrentUser().getUid();
+        Log.d("Adi", "onCreate: "+userId);
         userRef = FirebaseDatabase.getInstance().getReference().child("Poll").child(userId);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewID);
@@ -137,7 +138,6 @@ public class PollActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.startListening();
 
-        fab = (FloatingActionButton) findViewById(R.id.adminFab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,10 +151,6 @@ public class PollActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser==null){
-            sendToAdminLogin();
-        }
     }
 
     @Override
@@ -169,6 +165,7 @@ public class PollActivity extends AppCompatActivity {
 
         if(id==R.id.signout){
             mAuth.signOut();
+            sendToAdminLogin();
         }
 
         return super.onOptionsItemSelected(item);

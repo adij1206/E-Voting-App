@@ -43,7 +43,8 @@ public class UserPollActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mRef = FirebaseDatabase.getInstance().getReference().child("Poll");
-
+        String a = mAuth.getCurrentUser().getUid();
+        Log.d("Adi", "onCreate: "+a);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewUserPollId);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(UserPollActivity.this));
