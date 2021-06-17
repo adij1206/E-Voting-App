@@ -55,6 +55,7 @@ public class UserVotingActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.hasChildren()){
+                    candidateList.clear();
                     for(DataSnapshot dataSnapshot:snapshot.getChildren()){
                         String id = dataSnapshot.getKey();
                         Candidate candidate = dataSnapshot.child(id).getValue(Candidate.class);

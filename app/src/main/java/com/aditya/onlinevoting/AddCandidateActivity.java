@@ -88,6 +88,7 @@ public class AddCandidateActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.hasChildren()){
+                    candidateList.clear();
                     for(DataSnapshot dataSnapshot: snapshot.getChildren()){
                         String id = dataSnapshot.getKey();
                         Candidate c = dataSnapshot.child(id).getValue(Candidate.class);
@@ -174,10 +175,10 @@ public class AddCandidateActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             //start a new activity
-                            Intent intent = new Intent(AddCandidateActivity.this, AddCandidateActivity.class);
-                            intent.putExtra("pollname",pollName);
-                            startActivity(intent);
-                            finish();
+//                            Intent intent = new Intent(AddCandidateActivity.this, AddCandidateActivity.class);
+//                            intent.putExtra("pollname",pollName);
+//                            startActivity(intent);
+//                            finish();
 
                         }
                     }, 1200); //  1 second.*/
